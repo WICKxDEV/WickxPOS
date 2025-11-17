@@ -89,7 +89,7 @@ if ( Auth::check() ) {
                     @endif
                 </div>
                 <div class="p-2 text-xs flex justify-end text-gray-500">
-                    {!! Hook::filter( 'ns-footer-signature', sprintf( __( 'You\'re using <a tager="_blank" href="%s" class="hover:text-blue-400 mx-1 inline-block">WickxPOS %s</a>' ), 'https://my.wickxpos.com/en', config( 'wickxpos.version' ) ) ) !!}
+                    {!! Hook::filter( 'ns-footer-signature', sprintf( __( 'You\'re using <a tager="_blank" href="%s" class="hover:text-blue-400 mx-1 inline-block">WickxPOS %s</a>' ), 'https://wickxdev.github.io/Isuru-Wickramasinghe/', config( 'wickxpos.version' ) ) ) !!}
                 </div>
             </div>
         </div>
