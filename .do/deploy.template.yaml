@@ -1,0 +1,17 @@
+spec:
+  name: wickxpos-setup
+  databases:
+  - name: wickxposdb
+    engine: MYSQL
+    production: true
+    cluster_name: ns
+    db_name: wickxpos
+    db_user: wickxposuser
+  services:
+  - environment_slug: php
+    name: wickxpos
+    git:
+      repo_clone_url: https://github.com/wickxdev/WickxPOS-4x
+      branch: v4.7.x
+    build_command: npm run prod
+    run_command: heroku-php-apache2 public/
