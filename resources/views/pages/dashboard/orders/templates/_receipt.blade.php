@@ -30,7 +30,7 @@ $pos_vat          =   $order->settings?->where( 'key', 'ns_pos_vat' )->first()?-
                 <thead>
                     <tr class="font-semibold">
                         <td colspan="2" class="p-2 border-b border-gray-800">{{ __( 'Product' ) }}</td>
-                        <td colspan="2" class="p-2 border-b border-gray-800 text-middle">{{ __( 'Qty' ) }}</td>
+                        <!-- <td colspan="2" class="p-2 border-b border-gray-800 text-middle">{{ __( 'Qty' ) }}</td> -->
                         <td colspan="2" class="p-2 border-b border-gray-800 text-middle">{{ __( 'UnitPrice' ) }}</td>
                         <td class="p-2 border-b border-gray-800 text-right">{{ __( 'Total' ) }}</td>
                     </tr>
@@ -42,7 +42,7 @@ $pos_vat          =   $order->settings?->where( 'key', 'ns_pos_vat' )->first()?-
                             <?php $productName  =   View::make( 'pages.dashboard.orders.templates._product-name', compact( 'product' ) );?>
                             <?php echo Hook::filter( 'ns-receipt-product-name', $productName->render(), $product );?>
                         </td>
-                        <td colspan="2" class="p-2 border-b border-gray-800 text-middle">{{ $product->quantity }}</td>
+                        <!-- <td colspan="2" class="p-2 border-b border-gray-800 text-middle">{{ $product->quantity }}</td> -->
                         <td colspan="2" class="p-2 border-b border-gray-800 text-middle">{{ ns()->currency->define( $product->unit_price ) }}</td>
                         <td colspan="2" class="p-2 border-b border-gray-800 text-right">{{ ns()->currency->define( $product->total_price ) }}</td>
                     </tr>
