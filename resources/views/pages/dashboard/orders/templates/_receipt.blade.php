@@ -32,7 +32,7 @@ $pos_vat          =   $order->settings?->where( 'key', 'ns_pos_vat' )->first()?-
                         <td colspan="2" class="p-2 border-b border-gray-800">{{ __( 'Product' ) }}</td>
                         <!-- <td colspan="2" class="p-2 border-b border-gray-800 text-middle">{{ __( 'Qty' ) }}</td> -->
                         <td colspan="2" class="p-2 border-b border-gray-800 text-middle">{{ __( 'UnitPrice' ) }}</td>
-                        <td class="p-2 border-b border-gray-800 text-right">{{ __( 'Total' ) }}</td>
+                        <td class="p-2 border-b border-gray-800 text-right">{{ __( 'STotal' ) }}</td>
                     </tr>
                 </thead>
                 <tbody class="text-sm">
@@ -62,21 +62,10 @@ $pos_vat          =   $order->settings?->where( 'key', 'ns_pos_vat' )->first()?-
                         </tr>
                         @endif
                     @endif
-                    <tr>
+                    <!-- <tr>
                         <td colspan="2" class="p-2 border-gray-800 text-sm font-semibold">{{ __( 'Sub Total' ) }}</td>
                         <td colspan="5" class="p-2 border-gray-800 text-sm text-right">{{ ns()->currency->define( $order->subtotal ) }}</td>
-                    </tr>
-                    @if ( $order->discount > 0 )
-                    <tr>
-                        <td colspan="2" class="p-2 border-gray-800 text-lg font-semibold">
-                            <span>{{ __( 'Discount' ) }}</span>
-                            @if ( $order->discount_type === 'percentage' )
-                            <span>({{ $order->discount_percentage }}%)</span>
-                            @endif
-                        </td>
-                        <td colspan="5" class="p-2 border-gray-800 text-lg text-right">{{ ns()->currency->define( $order->discount ) }}</td>
-                    </tr>
-                    @endif
+                    </tr> -->
                     @if ( $order->total_coupons > 0 )
                     <tr>
                         <td colspan="2" class="p-2 border-b border-gray-800 text-sm font-semibold">
@@ -124,14 +113,14 @@ $pos_vat          =   $order->settings?->where( 'key', 'ns_pos_vat' )->first()?-
                     </tr>
                     @foreach( $order->payments as $payment )
                     <tr>
-                        <td class="p-2  border-gray-800 text-sm font-semibold" colspan="2">{{ $paymentTypes[ $payment[ 'identifier' ] ] ?? __( 'Unknown Payment' ) }}</td>
-                        <td colspan="5" class="p-2  border-gray-800 text-sm text-right">{{ ns()->currency->define( $payment[ 'value' ] ) }}</td>
+                        <td class="p-2 border-b border-gray-800 text-sm font-semibold" colspan="2">{{ $paymentTypes[ $payment[ 'identifier' ] ] ?? __( 'Unknown Payment' ) }}</td>
+                        <td colspan="5" class="p-2 border-b border-gray-800 text-sm text-right">{{ ns()->currency->define( $payment[ 'value' ] ) }}</td>
                     </tr>
                     @endforeach
-                    <tr>
+                    <!-- <tr>
                         <td colspan="2" class="p-2 border-b border-gray-800 text-sm font-semibold">{{ __( 'Paid' ) }}</td>
                         <td colspan="5" class="p-2 border-b border-gray-800 text-sm text-right">{{ ns()->currency->define( $order->tendered ) }}</td>
-                    </tr>
+                    </tr> -->
                     @if ( in_array( $order->payment_status, [ 'refunded', 'partially_refunded' ]) )
                         @foreach( $order->refund as $refund )
                         <tr>
@@ -154,6 +143,17 @@ $pos_vat          =   $order->settings?->where( 'key', 'ns_pos_vat' )->first()?-
                         </tr>
                         @break
                     @endswitch
+                    @if ( $order->discount > 0 )
+                    <tr>
+                        <td colspan="2" class="p-2 border-gray-800 text-lg font-semibold">
+                            <span>{{ __( 'Discount' ) }}</span>
+                            @if ( $order->discount_type === 'percentage' )
+                            <span>({{ $order->discount_percentage }}%)</span>
+                            @endif
+                        </td>
+                        <td colspan="5" class="p-2 border-gray-800 text-lg text-right">{{ ns()->currency->define( $order->discount ) }}</td>
+                    </tr>
+                    @endif
                 </tbody>
             </table>
             @if( $order->note_visibility === 'visible' )
