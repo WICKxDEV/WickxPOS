@@ -30,6 +30,8 @@ $pos_vat          =   $order->settings?->where( 'key', 'ns_pos_vat' )->first()?-
                 <thead>
                     <tr class="font-semibold">
                         <td colspan="2" class="p-2 border-b border-gray-800">{{ __( 'Product' ) }}</td>
+                        <td colspan="2" class="p-2 border-b border-gray-800 text-middle">{{ __( 'Qty' ) }}</td>
+                        <td colspan="2" class="p-2 border-b border-gray-800 text-middle">{{ __( 'UnitPrice' ) }}</td>
                         <td class="p-2 border-b border-gray-800 text-right">{{ __( 'Total' ) }}</td>
                     </tr>
                 </thead>
@@ -40,7 +42,9 @@ $pos_vat          =   $order->settings?->where( 'key', 'ns_pos_vat' )->first()?-
                             <?php $productName  =   View::make( 'pages.dashboard.orders.templates._product-name', compact( 'product' ) );?>
                             <?php echo Hook::filter( 'ns-receipt-product-name', $productName->render(), $product );?>
                         </td>
-                        <td class="p-2 border-b border-gray-800 text-right">{{ ns()->currency->define( $product->total_price ) }}</td>
+                        <td colspan="2" class="p-2 border-b border-gray-800 text-middle">{{ $product->quantity }}</td>
+                        <td colspan="2" class="p-2 border-b border-gray-800 text-middle">{{ ns()->currency->define( $product->unit_price ) }}</td>
+                        <td colspan="2" class="p-2 border-b border-gray-800 text-right">{{ ns()->currency->define( $product->total_price ) }}</td>
                     </tr>
                     @endforeach
                 </tbody>
@@ -49,28 +53,28 @@ $pos_vat          =   $order->settings?->where( 'key', 'ns_pos_vat' )->first()?-
                         @if( $price_with_tax === 'no' )
                         <tr>
                             <td colspan="2" class="p-2 border-b border-gray-800 text-sm font-semibold">{{ __( 'Product Taxes' ) }}</td>
-                            <td class="p-2 border-b border-gray-800 text-sm text-right">{{ ns()->currency->define( $order->products_tax_value ) }}</td>
+                            <td colspan="5" class="p-2 border-b border-gray-800 text-sm text-right">{{ ns()->currency->define( $order->products_tax_value ) }}</td>
                         </tr>
                         @else
                         <tr>
                             <td colspan="2" class="p-2 border-b border-gray-800 text-sm font-semibold">{{ __( 'Product Taxes (Included)' ) }}</td>
-                            <td class="p-2 border-b border-gray-800 text-sm text-right">{{ ns()->currency->define( $order->products_tax_value ) }}</td>
+                            <td colspan="5" class="p-2 border-b border-gray-800 text-sm text-right">{{ ns()->currency->define( $order->products_tax_value ) }}</td>
                         </tr>
                         @endif
                     @endif
                     <tr>
-                        <td colspan="2" class="p-2 border-b border-gray-800 text-sm font-semibold">{{ __( 'Sub Total' ) }}</td>
-                        <td class="p-2 border-b border-gray-800 text-sm text-right">{{ ns()->currency->define( $order->subtotal ) }}</td>
+                        <td colspan="2" class="p-2 border-gray-800 text-sm font-semibold">{{ __( 'Sub Total' ) }}</td>
+                        <td colspan="5" class="p-2 border-gray-800 text-sm text-right">{{ ns()->currency->define( $order->subtotal ) }}</td>
                     </tr>
                     @if ( $order->discount > 0 )
                     <tr>
-                        <td colspan="2" class="p-2 border-b border-gray-800 text-sm font-semibold">
+                        <td colspan="2" class="p-2 border-gray-800 text-lg font-semibold">
                             <span>{{ __( 'Discount' ) }}</span>
                             @if ( $order->discount_type === 'percentage' )
                             <span>({{ $order->discount_percentage }}%)</span>
                             @endif
                         </td>
-                        <td class="p-2 border-b border-gray-800 text-sm text-right">{{ ns()->currency->define( $order->discount ) }}</td>
+                        <td colspan="5" class="p-2 border-gray-800 text-lg text-right">{{ ns()->currency->define( $order->discount ) }}</td>
                     </tr>
                     @endif
                     @if ( $order->total_coupons > 0 )
@@ -78,16 +82,16 @@ $pos_vat          =   $order->settings?->where( 'key', 'ns_pos_vat' )->first()?-
                         <td colspan="2" class="p-2 border-b border-gray-800 text-sm font-semibold">
                             <span>{{ __( 'Coupons' ) }}</span>
                         </td>
-                        <td class="p-2 border-b border-gray-800 text-sm text-right">{{ ns()->currency->define( $order->total_coupons ) }}</td>
+                        <td colspan="5" class="p-2 border-gray-800 text-sm text-right">{{ ns()->currency->define( $order->total_coupons ) }}</td>
                     </tr>
                     @endif
                     @if ( ns()->option->get( 'ns_invoice_display_tax_breakdown' ) === 'yes' ) 
                         @foreach( $order->taxes as $tax )
                         <tr>
-                            <td colspan="2" class="p-2 border-b border-gray-800 text-sm font-semibold">
+                            <td colspan="2" class="p-2 border-gray-800 text-sm font-semibold">
                                 <span>{{ $tax->tax_name }} — {{ $order->tax_type === 'inclusive' ? __( 'Inclusive' ) : __( 'Exclusive' ) }}</span>
                             </td>
-                            <td class="p-2 border-b border-gray-800 text-sm text-right">{{ ns()->currency->define( $tax->tax_value ) }}</td>
+                            <td colspan="5" class="p-2 border-gray-800 text-sm text-right">{{ ns()->currency->define( $tax->tax_value ) }}</td>
                         </tr>
                         @endforeach
                         @if ( $order->products_tax_value > 0 )
@@ -95,7 +99,7 @@ $pos_vat          =   $order->settings?->where( 'key', 'ns_pos_vat' )->first()?-
                             <td colspan="2" class="p-2 border-b border-gray-800 text-sm font-semibold">
                                 <span>{{ $order->tax_type === 'inclusive' ? __( 'Inclusive Product Taxes' ) : __( 'Exclusive Product Taxes' ) }}</span>
                             </td>
-                            <td class="p-2 border-b border-gray-800 text-sm text-right">{{ ns()->currency->define( $order->products_tax_value ) }}</td>
+                            <td colspan="5" class="p-2 border-b border-gray-800 text-sm text-right">{{ ns()->currency->define( $order->products_tax_value ) }}</td>
                         </tr>
                         @endif
                     @else                     
@@ -104,35 +108,35 @@ $pos_vat          =   $order->settings?->where( 'key', 'ns_pos_vat' )->first()?-
                             <td colspan="2" class="p-2 border-b border-gray-800 text-sm font-semibold">
                                 <span>{{ $order->tax_group?->name ?? __( 'Unassigned Tax Group' ) }} ({{ $order->tax_type === 'inclusive' ? __( 'Inclusive' ) : '' }})</span>
                             </td>
-                            <td class="p-2 border-b border-gray-800 text-sm text-right">{{ ns()->currency->define( $order->tax_value ) }}</td>
+                            <td colspan="5" class="p-2 border-b border-gray-800 text-sm text-right">{{ ns()->currency->define( $order->tax_value ) }}</td>
                         </tr>
                         @endif
                     @endif
                     @if ( $order->shipping > 0 )
                     <tr>
                         <td colspan="2" class="p-2 border-b border-gray-800 text-sm font-semibold">{{ __( 'Shipping' ) }}</td>
-                        <td class="p-2 border-b border-gray-800 text-sm text-right">{{ ns()->currency->define( $order->shipping ) }}</td>
+                        <td colspan="5" class="p-2 border-gray-800 text-sm text-right">{{ ns()->currency->define( $order->shipping ) }}</td>
                     </tr>
                     @endif
                     <tr>
-                        <td colspan="2" class="p-2 border-b border-gray-800 text-sm font-semibold">{{ __( 'Total' ) }}</td>
-                        <td class="p-2 border-b border-gray-800 text-sm text-right">{{ ns()->currency->define( $order->total ) }}</td>
+                        <td colspan="2" class="p-2 border-gray-800 text-sm font-semibold">{{ __( 'Total' ) }}</td>
+                        <td colspan="5" class="p-2 border-gray-800 text-sm text-right">{{ ns()->currency->define( $order->total ) }}</td>
                     </tr>
                     @foreach( $order->payments as $payment )
                     <tr>
-                        <td class="p-2 border-b border-gray-800 text-sm font-semibold" colspan="2">{{ $paymentTypes[ $payment[ 'identifier' ] ] ?? __( 'Unknown Payment' ) }}</td>
-                        <td class="p-2 border-b border-gray-800 text-sm text-right">{{ ns()->currency->define( $payment[ 'value' ] ) }}</td>
+                        <td class="p-2  border-gray-800 text-sm font-semibold" colspan="2">{{ $paymentTypes[ $payment[ 'identifier' ] ] ?? __( 'Unknown Payment' ) }}</td>
+                        <td colspan="5" class="p-2  border-gray-800 text-sm text-right">{{ ns()->currency->define( $payment[ 'value' ] ) }}</td>
                     </tr>
                     @endforeach
                     <tr>
                         <td colspan="2" class="p-2 border-b border-gray-800 text-sm font-semibold">{{ __( 'Paid' ) }}</td>
-                        <td class="p-2 border-b border-gray-800 text-sm text-right">{{ ns()->currency->define( $order->tendered ) }}</td>
+                        <td colspan="5" class="p-2 border-b border-gray-800 text-sm text-right">{{ ns()->currency->define( $order->tendered ) }}</td>
                     </tr>
                     @if ( in_array( $order->payment_status, [ 'refunded', 'partially_refunded' ]) )
                         @foreach( $order->refund as $refund )
                         <tr>
                             <td colspan="2" class="p-2 border-b border-gray-800 text-sm font-semibold">{{ __( 'Refunded' ) }}</td>
-                            <td class="p-2 border-b border-gray-800 text-sm text-right">{{ ns()->currency->define( - $refund->total ) }}</td>
+                            <td colspan="5" class="p-2 border-b border-gray-800 text-sm text-right">{{ ns()->currency->define( - $refund->total ) }}</td>
                         </tr>
                         @endforeach
                     @endif
@@ -140,20 +144,20 @@ $pos_vat          =   $order->settings?->where( 'key', 'ns_pos_vat' )->first()?-
                         @case( Order::PAYMENT_PAID )
                         <tr>
                             <td colspan="2" class="p-2 border-b border-gray-800 text-sm font-semibold">{{ __( 'Change' ) }}</td>
-                            <td class="p-2 border-b border-gray-800 text-sm text-right">{{ ns()->currency->define( $order->change ) }}</td>
+                            <td colspan="5" class="p-2 border-b border-gray-800 text-sm text-right">{{ ns()->currency->define( $order->change ) }}</td>
                         </tr>
                         @break
                         @case( Order::PAYMENT_PARTIALLY )
                         <tr>
-                            <td colspan="2" class="p-2 border-b border-gray-800 text-sm font-semibold">{{ __( 'Due' ) }}</td>
-                            <td class="p-2 border-b border-gray-800 text-sm text-right">{{ ns()->currency->define( abs( $order->change ) ) }}</td>
+                            <td colspan="2" class="p-2 border-gray-800 text-sm font-semibold">{{ __( 'Due' ) }}</td>
+                            <td colspan="5" class="p-2 border-b border-gray-800 text-sm text-right">{{ ns()->currency->define( abs( $order->change ) ) }}</td>
                         </tr>
                         @break
                     @endswitch
                 </tbody>
             </table>
             @if( $order->note_visibility === 'visible' )
-            <div class="pt-6 pb-4 text-center text-gray-800 text-sm">
+            <div class="pt-6 pb-4 text-center text-gray-800 text-lg">
                 <strong>{{ __( 'Note: ' ) }}</strong> {{ $order->note }}
             </div>
             @endif
